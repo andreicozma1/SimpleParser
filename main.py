@@ -90,8 +90,6 @@ def getGoogleResults(query, accepted_sites, relevant=None):
     # print  most relevant results
     if relevant and len(query) > 4:
 
-        print("Top " + str(relevant) + " Results:")
-
         results = []
         i = 0
         while len(results) < relevant:
