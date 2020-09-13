@@ -24,12 +24,17 @@ class QuizletParser():
         for i in job_elems:
             question = i.find('a', class_='SetPageTerm-wordText').find('span').decode_contents().replace("<br/>","")
             answer = i.find('a', class_='SetPageTerm-definitionText').find('span').decode_contents().replace("<br/>","")
-            questions.append(question)
-            questionsAnswers[question] = answer
+            if len(question) > len(answer):
+                questions.append(question)
+                questionsAnswers[question] = answer
+            else:
+                questions.append(answer)
+                questionsAnswers[answer] = question
+
         return questions,questionsAnswers
 
     def match(self, q, qA, query):
-        matches = difflib.get_close_matches(query, q, True, 0.02)
+        matches = difflib.get_close_matches(query, q, True, 0.01)
         print("Matching Queries: ", len(matches))
 
         for i in matches:
@@ -40,7 +45,6 @@ class QuizletParser():
             print("       = ", qA[i])
 
         print("############")
-        print()
 
 
 # reads a question from stdin and returns it as a string
