@@ -66,7 +66,7 @@ def getQuestion(prompt=""):
 
 
 # takes a string and queries google then returns a list of tuples with the link and question
-def getGoogleResults(query, accepted_sites):
+def getGoogleResults(query, accepted_sites, relevant=0):
     # search google
     req = requests.get('http://google.com/search?q='+query)
     soup = BeautifulSoup(req.content, 'html.parser')
@@ -76,6 +76,20 @@ def getGoogleResults(query, accepted_sites):
     links = []
     for l in a:
         links.append(l.get('href').replace("/url?q=", ''))
+
+    # print  most relevant results
+    if relevant:
+        print("Top "+str(relevant)+" Results:")
+        results = []
+        i = 0
+        while len(results) < relevant:
+            if i >= len(links):
+                break
+            if 'https' in links[i] and 'google' not in links[i]:
+                results.append(links[i])
+            i += 1
+        for i in range(len(results)):
+            print(i, " - ", results[i])
 
     # parse the links for accepted sites
     sites = []
@@ -90,7 +104,7 @@ def getGoogleResults(query, accepted_sites):
 # get list of relevant sites
 
 while True:
-    sites, query = getGoogleResults(getQuestion(), ['quizlet'])
+    sites, query = getGoogleResults(getQuestion(), ['quizlet'], 10)
 
     for s in sites:
         qp = QuizletParser(s, query)
