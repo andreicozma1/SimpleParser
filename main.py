@@ -71,7 +71,7 @@ def getQuestion(prompt=""):
 
 
 # takes a string and queries google then returns a list of tuples with the link and question
-def getGoogleResults(query, accepted_sites, relevant=0):
+def getGoogleResults(query, accepted_sites, relevant=None):
     # search google
     req = requests.get('http://google.com/search?q='+query)
     soup = BeautifulSoup(req.content, 'html.parser')
@@ -83,7 +83,7 @@ def getGoogleResults(query, accepted_sites, relevant=0):
         links.append(l.get('href').replace("/url?q=", ''))
 
     # print  most relevant results
-    if relevant:
+    if relevant and len(query) > 4:
         print("Top "+str(relevant)+" Results:")
         results = []
         i = 0
