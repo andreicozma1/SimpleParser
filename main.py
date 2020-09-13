@@ -81,7 +81,10 @@ def getGoogleResults(query, accepted_sites, relevant=None):
     # gather all of the links
     links = []
     for l in a:
-        links.append(l.get('href').replace("/url?q=", ''))
+        url = l.get('href').replace("/url?q=", '')
+        if '&sa=' in url:
+            url = url[:url.find('&sa=')]
+        links.append(url)
 
     # print  most relevant results
     if relevant and len(query) > 4:
