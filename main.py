@@ -2,13 +2,15 @@ import difflib
 from bs4 import BeautifulSoup
 import requests
 
+
 class QuizletParser():
     def __init__(self, url, query):
         print("###############################################")
         print("URL: ", url)
         print("Query: ", query)
 
-        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
         page = requests.get(url, headers=headers)
 
         soup = BeautifulSoup(page.content, "html.parser")
@@ -16,14 +18,17 @@ class QuizletParser():
         self.match(q, qA, query)
         print("###############################################")
 
-
     def parse(self, soup):
         job_elems = soup.find_all('div', class_='SetPageTerms-term')
         questions = []
         questionsAnswers = {}
         for i in job_elems:
-            question = i.find('a', class_='SetPageTerm-wordText').find('span').decode_contents().replace("<br/>","")
-            answer = i.find('a', class_='SetPageTerm-definitionText').find('span').decode_contents().replace("<br/>","")
+            question = i.find('a', class_='SetPageTerm-wordText').find('span').decode_contents().replace("<br/>",
+                                                                                                         " ").replace(
+                "_", "")
+            answer = i.find('a', class_='SetPageTerm-definitionText').find('span').decode_contents().replace("<br/>",
+                                                                                                             " ").replace(
+                "_", "")
             if len(question) > len(answer):
                 questions.append(question)
                 questionsAnswers[question] = answer
@@ -31,14 +36,14 @@ class QuizletParser():
                 questions.append(answer)
                 questionsAnswers[answer] = question
 
-        return questions,questionsAnswers
+        return questions, questionsAnswers
 
     def match(self, q, qA, query):
-        matches = difflib.get_close_matches(query, q, True, 0.01)
+        matches = difflib.get_close_matches(query, q, n=3, cutoff=0.05)
         print("Matching Queries: ", len(matches))
 
         for i in matches:
-            print("############")
+            print("############ Ratio:", round(difflib.SequenceMatcher(None, i, query).ratio() * 100, 2), "%")
             print("    Question:")
             print("       = ", i)
             print("    Answer:")
@@ -67,13 +72,13 @@ def getQuestion(prompt=""):
         if len(w) < 4:
             question.remove(w)
     question = ' '.join([str(elem) for elem in question])
-    return question.replace('_',' ')
+    return question.replace('_', ' ')
 
 
 # takes a string and queries google then returns a list of tuples with the link and question
 def getGoogleResults(query, accepted_sites, relevant=None):
     # search google
-    req = requests.get('http://google.com/search?q='+query)
+    req = requests.get('http://google.com/search?q=' + query)
     soup = BeautifulSoup(req.content, 'html.parser')
     a = soup.find_all('a', href=True)
 
@@ -84,7 +89,7 @@ def getGoogleResults(query, accepted_sites, relevant=None):
 
     # print  most relevant results
     if relevant and len(query) > 4:
-        print("Top "+str(relevant)+" Results:")
+        print("Top " + str(relevant) + " Results:")
         results = []
         i = 0
         while len(results) < relevant:
@@ -113,6 +118,3 @@ while True:
 
     for s in sites:
         qp = QuizletParser(s, query)
-
-
-
