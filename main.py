@@ -84,10 +84,12 @@ def getGoogleResults(query, accepted_sites):
 
 
 # get list of relevant sites
-sites, query = getGoogleResults(getQuestion(), ['quizlet'])
 
-for s in sites:
-    qp = QuizletParser(s, query)
+while True:
+    sites, query = getGoogleResults(getQuestion(), ['quizlet'])
+    for s in sites:
+        qp = QuizletParser(s, query)
+    print("###############################################")
 
 
 
