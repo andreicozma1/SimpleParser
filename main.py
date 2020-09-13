@@ -6,8 +6,8 @@ import requests
 class QuizletParser():
     def __init__(self, url, query):
         print("###############################################")
-        print("URL: ", url)
-        print("Query: ", query)
+        print(" - URL: ", url)
+        print(" - Query: ", query)
 
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -40,16 +40,16 @@ class QuizletParser():
 
     def match(self, q, qA, query):
         matches = difflib.get_close_matches(query, q, n=3, cutoff=0.05)
-        print("Matching Queries: ", len(matches))
+        print(" - Matching Queries: ", len(matches))
 
         for i in matches:
-            print("############ Ratio:", round(difflib.SequenceMatcher(None, i, query).ratio() * 100, 2), "%")
-            print("    Question:")
-            print("       = ", i)
-            print("    Answer:")
-            print("       = ", qA[i])
+            print("  ############ Ratio:", round(difflib.SequenceMatcher(None, i, query).ratio() * 100, 2), "%")
+            print("      Question:")
+            print("         = ", i)
+            print("      Answer:")
+            print("         = ", qA[i])
 
-        print("############")
+        print("  ############")
 
 
 # reads a question from stdin and returns it as a string
