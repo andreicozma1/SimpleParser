@@ -25,10 +25,10 @@ class QuizletParser():
         for i in job_elems:
             question = i.find('a', class_='SetPageTerm-wordText').find('span').decode_contents().replace("<br/>"," ").replace("<br>"," ").replace("</br>"," ").replace("_", "")
             answer = i.find('a', class_='SetPageTerm-definitionText').find('span').decode_contents().replace("<br/>"," ").replace("<br>"," ").replace("</br>"," ").replace("_", "")
-            if len(question) > len(answer):
+            if len(question) > 5:
                 questions.append(question)
                 questionsAnswers[question] = answer
-            else:
+            if len(answer) > 5:
                 questions.append(answer)
                 questionsAnswers[answer] = question
 
