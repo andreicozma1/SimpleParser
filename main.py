@@ -84,7 +84,6 @@ def getGoogleResults(query, accepted_sites, relevant=None):
 
     # print  most relevant results
     if relevant and len(query) > 4:
-        print("Top "+str(relevant)+" Results:")
         results = []
         i = 0
         while len(results) < relevant:
@@ -93,6 +92,8 @@ def getGoogleResults(query, accepted_sites, relevant=None):
             if 'https' in links[i] and 'google' not in links[i]:
                 results.append(links[i])
             i += 1
+        if len(results) > 0:
+            print("Top " + str(len(results)) + " Results:")
         for i in range(len(results)):
             print(i, " - ", results[i])
 
@@ -113,6 +114,7 @@ while True:
 
     for s in sites:
         qp = QuizletParser(s, query)
+        print("#####################################################")
 
 
 
