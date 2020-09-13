@@ -57,7 +57,8 @@ def getQuestion(prompt=""):
         line = input()
         if len(line.split()) == 0:
             break
-        line = line.replace('\n', '')
+        line = line.replace('\n', ' ')
+
         question += ' ' + line
     question = question.split(" ")
 
@@ -66,7 +67,7 @@ def getQuestion(prompt=""):
         if len(w) < 4:
             question.remove(w)
     question = ' '.join([str(elem) for elem in question])
-    return question
+    return question.replace('_',' ')
 
 
 # takes a string and queries google then returns a list of tuples with the link and question
@@ -112,9 +113,6 @@ while True:
 
     for s in sites:
         qp = QuizletParser(s, query)
-    print("###############################################")
-    print("###############################################")
-    print("###############################################")
 
 
 
