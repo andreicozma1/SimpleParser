@@ -14,6 +14,8 @@ class QuizletParser():
         soup = BeautifulSoup(page.content, "html.parser")
         q, qA = self.parse(soup)
         self.match(q, qA, query)
+        print("###############################################")
+
 
     def parse(self, soup):
         job_elems = soup.find_all('div', class_='SetPageTerms-term')
