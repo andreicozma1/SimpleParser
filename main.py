@@ -6,6 +6,8 @@ class QuizletParser():
     def __init__(self, url, query):
         print("###############################################")
         print("URL: ", url)
+        print("Query: ", query)
+
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
         page = requests.get(url, headers=headers)
 
@@ -25,17 +27,17 @@ class QuizletParser():
         return questions,questionsAnswers
 
     def match(self, q, qA, query):
-        print("Matching Queries:")
         matches = difflib.get_close_matches(query, q, True, 0.02)
-        print(" - Found ", len(matches))
-        print("############")
-        for i in matches:
-            print("Question:")
-            print(i)
-            print("Answer:")
-            print(qA[i])
+        print("Matching Queries: ", len(matches))
 
-        print("#DONE")
+        for i in matches:
+            print("############")
+            print("    Question:")
+            print("       = ", i)
+            print("    Answer:")
+            print("       = ", qA[i])
+
+        print("############")
         print()
 
 
@@ -87,6 +89,7 @@ def getGoogleResults(query, accepted_sites):
 
 while True:
     sites, query = getGoogleResults(getQuestion(), ['quizlet'])
+
     for s in sites:
         qp = QuizletParser(s, query)
     print("###############################################")
