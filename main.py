@@ -71,17 +71,16 @@ def getGoogleResults(query, accepted_sites):
     for l in links:
         for a in accepted_sites:
             if a in l:
-                sites.append((l, query))
+                sites.append(l)
 
-    return sites
-
-
+    return sites, query
 
 
-sites = getGoogleResults(getQuestion(), ['quizlet'])
+# get list of relevant sites
+sites, query = getGoogleResults(getQuestion(), ['quizlet'])
 
 for s in sites:
-    qp = QuizletParser(s[0], s[1])
+    qp = QuizletParser(s, query)
 
 
 
