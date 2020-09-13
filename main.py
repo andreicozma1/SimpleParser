@@ -4,6 +4,8 @@ import requests
 
 class QuizletParser():
     def __init__(self, url, query):
+        print("###############################################")
+        print("URL: ", url)
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
         page = requests.get(url, headers=headers)
 
@@ -16,20 +18,25 @@ class QuizletParser():
         questions = []
         questionsAnswers = {}
         for i in job_elems:
-            question = i.find('a', class_='SetPageTerm-wordText').find('span').decode_contents().replace("<br/>","\n")
-            answer = i.find('a', class_='SetPageTerm-definitionText').find('span').decode_contents().replace("<br/>","\n")
+            question = i.find('a', class_='SetPageTerm-wordText').find('span').decode_contents().replace("<br/>","")
+            answer = i.find('a', class_='SetPageTerm-definitionText').find('span').decode_contents().replace("<br/>","")
             questions.append(question)
             questionsAnswers[question] = answer
         return questions,questionsAnswers
 
     def match(self, q, qA, query):
-        matches = difflib.get_close_matches(query, q)
-        print(query)
+        print("Matching Queries:")
+        matches = difflib.get_close_matches(query, q, True, 0.02)
+        print(" - Found ", len(matches))
+        print("############")
         for i in matches:
-            print("Question")
+            print("Question:")
             print(i)
-            print("Answer")
+            print("Answer:")
             print(qA[i])
+
+        print("#DONE")
+        print()
 
 
 # reads a question from stdin and returns it as a string
